@@ -24,6 +24,11 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatetimepickerModule } from '@mat-datetimepicker/core';
+import { MatMomentDatetimeModule } from '@mat-datetimepicker/moment';
+import { MatMomentDateModule } from '@angular/material-moment-adapter'; // adicional
+
 
 //Para usar el mask
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
@@ -40,6 +45,10 @@ import { AdminScreenComponent } from './screens/admin-screen/admin-screen.compon
 import { AlumnosScreenComponent } from './screens/alumnos-screen/alumnos-screen.component';
 import { MaestrosScreenComponent } from './screens/maestros-screen/maestros-screen.component';
 import { EliminarUserModalComponent } from './modals/eliminar-user-modal/eliminar-user-modal.component';
+import { RegistroEventosComponent } from './screens/registro-eventos/registro-eventos.component';
+
+
+
 
 @NgModule({
   declarations: [
@@ -54,7 +63,10 @@ import { EliminarUserModalComponent } from './modals/eliminar-user-modal/elimina
     AdminScreenComponent,
     AlumnosScreenComponent,
     MaestrosScreenComponent,
-    EliminarUserModalComponent
+    EliminarUserModalComponent,
+    RegistroEventosComponent,
+    
+
   ],
   imports: [
     BrowserModule,
@@ -75,6 +87,12 @@ import { EliminarUserModalComponent } from './modals/eliminar-user-modal/elimina
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    ReactiveFormsModule,
+    MatDatetimepickerModule,
+    MatMomentDatetimeModule,
+    MatMomentDateModule,
+
+
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},

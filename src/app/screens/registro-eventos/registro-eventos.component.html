@@ -1,0 +1,133 @@
+<h2>Formulario de Registro de Eventos</h2>
+<form [formGroup]="eventoForm" (ngSubmit)="enviarFormulario()">
+
+  <!-- Nombre -->
+  <mat-form-field class="w-100">
+    <mat-label>Nombre del Evento</mat-label>
+    <input matInput formControlName="nombre">
+    <mat-error *ngIf="eventoForm.get('nombre')?.hasError('required') && eventoForm.get('nombre')?.touched">
+      Campo requerido
+    </mat-error>
+    <mat-error *ngIf="eventoForm.get('nombre')?.hasError('pattern') && eventoForm.get('nombre')?.touched">
+      Solo letras y números
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Tipo de Evento -->
+  <mat-form-field class="w-100">
+    <mat-label>Tipo de Evento</mat-label>
+    <mat-select formControlName="tipo">
+      <mat-option *ngFor="let tipo of tiposEvento" [value]="tipo">{{ tipo }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="eventoForm.get('tipo')?.hasError('required') && eventoForm.get('tipo')?.touched">
+      Campo requerido
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Fecha -->
+  <mat-form-field class="w-100">
+    <mat-label>Fecha de Realización</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="fecha" [min]="today">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="eventoForm.get('fecha')?.hasError('required') && eventoForm.get('fecha')?.touched">
+      Campo requerido
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Hora de Inicio -->
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Hora de Inicio</mat-label>
+    <input matInput [matDatetimepicker]="horaInicioPicker" formControlName="horaInicio">
+    <mat-datetimepicker-toggle matSuffix [for]="horaInicioPicker"></mat-datetimepicker-toggle>
+    <mat-datetimepicker #horaInicioPicker type="time"></mat-datetimepicker>
+    <mat-error *ngIf="eventoForm.get('horaInicio')?.hasError('required') && eventoForm.get('horaInicio')?.touched">
+      Campo requerido
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Hora de Finalización -->
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Hora de Finalización</mat-label>
+    <input matInput [matDatetimepicker]="horaFinPicker" formControlName="horaFin">
+    <mat-datetimepicker-toggle matSuffix [for]="horaFinPicker"></mat-datetimepicker-toggle>
+    <mat-datetimepicker #horaFinPicker type="time"></mat-datetimepicker>
+    <mat-error *ngIf="eventoForm.get('horaFin')?.hasError('required') && eventoForm.get('horaFin')?.touched">
+      Campo requerido
+    </mat-error>
+    <mat-error *ngIf="horaInvalida">
+      La hora final debe ser mayor que la de inicio
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Lugar -->
+  <mat-form-field class="w-100">
+    <mat-label>Lugar</mat-label>
+    <input matInput formControlName="lugar">
+    <mat-error *ngIf="eventoForm.get('lugar')?.hasError('required') && eventoForm.get('lugar')?.touched">
+      Campo requerido
+    </mat-error>
+    <mat-error *ngIf="eventoForm.get('lugar')?.hasError('pattern') && eventoForm.get('lugar')?.touched">
+      Solo letras y números
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Público Objetivo -->
+  <div formGroupName="publicoObjetivo" class="mb-3">
+    <label class="form-label fw-bold d-block mb-2" style="font-size: 16px;">
+      Público Objetivo
+    </label>
+    <mat-checkbox formControlName="estudiantes">Estudiantes</mat-checkbox>
+    <mat-checkbox formControlName="profesores">Profesores</mat-checkbox>
+    <mat-checkbox formControlName="general">Público general</mat-checkbox>
+  </div>
+
+  <!-- Programa Educativo (solo si se selecciona estudiantes) -->
+  <mat-form-field class="w-100" *ngIf="mostrarProgramaEducativo()">
+    <mat-label>Programa Educativo</mat-label>
+    <mat-select formControlName="programaEducativo">
+      <mat-option *ngFor="let prog of programasEducativos" [value]="prog">{{ prog }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Responsable -->
+  <mat-form-field class="w-100">
+    <mat-label>Responsable del Evento</mat-label>
+    <mat-select formControlName="responsable">
+      <mat-option *ngFor="let resp of responsables" [value]="resp.id">{{ resp.nombre }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="eventoForm.get('responsable')?.hasError('required') && eventoForm.get('responsable')?.touched">
+      Campo requerido
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Descripción -->
+  <mat-form-field class="w-100">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput formControlName="descripcion" rows="4" maxlength="300"></textarea>
+    <mat-error *ngIf="eventoForm.get('descripcion')?.hasError('required') && eventoForm.get('descripcion')?.touched">
+      Campo requerido
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Cupo máximo -->
+  <mat-form-field class="w-100">
+    <mat-label>Cupo Máximo de Asistentes</mat-label>
+    <input
+      matInput
+      type="text"
+      formControlName="cupoMaximo"
+      mask="000"
+      placeholder="Máximo 999"
+    >
+    <mat-error *ngIf="eventoForm.get('cupoMaximo')?.hasError('required') && eventoForm.get('cupoMaximo')?.touched">
+      Campo requerido
+    </mat-error>
+    <mat-error *ngIf="eventoForm.get('cupoMaximo')?.hasError('pattern') && eventoForm.get('cupoMaximo')?.touched">
+      Solo se permiten números enteros positivos (1 a 999)
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Botón -->
+  <button mat-raised-button color="primary" type="submit">Registrar Evento</button>
+</form>
